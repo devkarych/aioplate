@@ -13,13 +13,18 @@
 ## Installation
 
 1) Create repo by this template
-2) Configure bot settings:
+2) Configure local bot api:
+   - Install Docker.
+   - On linux: `sudo usermod -aG docker $USER` and `sudo reboot`.
+   - Install Bot api server. Install: https://tdlib.github.io/telegram-bot-api/build.html?os=Linux.
+   - Launch Bot api docker image: `docker run -d -p 8081:8081 --name=telegram-bot-api --restart=always -v telegram-bot-api-data:/var/lib/telegram-bot-api -e TELEGRAM_API_ID=<API_ID> -e TELEGRAM_API_HASH=<API_HASH> aiogram/telegram-bot-api:latest`
+4) Configure bot settings:
     1) Rename `app.ini.example` to `app.ini`. Don't worry, app.ini already added to gitignore.
     2) Configure app.ini vars. Bot parse_mode, redis params are optional and you can remove it if you want.
-3) Configure system:
+5) Configure system:
     - Install postgreSQL, systemd, Python 3.9.x
 
-4) Configure Postgres & alembic:
+6) Configure Postgres & alembic:
     - PSQL: `CREATE DATABASE your_database_name;`
     - `alembic init --template async migrations`
     - `alembic revision --autogenerate -m "init"`
@@ -28,8 +33,8 @@
       app.services.database.base
     - Open alembic.ini -> `sqlalchemy.url = postgresql+asyncpg://DB_OWNER:DB_OWNER_PASSWD@localhost/DB_NAME`
 
-5) You have 2 default ways to configure project.
-   1) Configure python-app & dependencies with pip:
+7) You have 2 default ways to configure project.
+   1) Configure python-app & dependencies with pip **(recommend)**:
       - Create venv: `python3.10 -m venv venv`
       - Activate venv: `source venv/bin/activate`
       - Install dependencies: `pip install -r requirements.txt`
@@ -40,7 +45,7 @@
       - Run app: `make run`
       - Update dependencies*: `poetry update`
 
-6) It is highly recommended for deployment (Ubuntu / Debian):
+8) It is highly recommended for deployment (Ubuntu / Debian):
     - Configure app.service file.
     - `cp app.service etc/systemd/system/YOUR_APP_NAME.service`
     - `sudo systemctl enable YOUR_APP_NAME.service`

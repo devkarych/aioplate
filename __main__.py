@@ -4,6 +4,7 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
+from aiogram.bot.api import TelegramAPIServer
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from app.core import middlewares
@@ -26,7 +27,11 @@ async def main() -> None:
 
     config: _config.Config = _config.load_config()
 
-    bot = Bot(config.bot.token, parse_mode=config.bot.parse_mode)
+    bot = Bot(
+        token=config.bot.token,
+        parse_mode=config.bot.parse_mode,
+        server=TelegramAPIServer.from_base(config.bot.host_url)
+    )
     bot["db"] = await setup_get_pool(db_uri=config.db.get_uri())
     dp = Dispatcher(bot=bot, storage=MemoryStorage())
     await set_bot_commands(bot=bot)

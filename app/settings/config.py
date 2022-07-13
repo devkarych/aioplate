@@ -13,6 +13,7 @@ class Bot:
 
     token: str
     parse_mode: str
+    host_url: str
 
 
 @dataclass
@@ -45,11 +46,9 @@ def get_parse_mode(bot_section: configparser.SectionProxy) -> parse_mode:
     """
 
     _parse_mode: parse_mode
-
     try:
         _parse_mode = bot_section["parse_mode"] if bot_section["parse_mode"] in \
                                                    ("HTML", "MarkdownV2") else "HTML"
-
     # Param parse_mode isn't set in app.ini. HTML will be set.
     except KeyError:
         _parse_mode = "HTML"
@@ -77,7 +76,8 @@ def load_config() -> Config:
     return Config(
         bot=Bot(
             token=bot["token"],
-            parse_mode=get_parse_mode(bot_section=bot)
+            parse_mode=get_parse_mode(bot_section=bot),
+            host_url=bot["host_url"]
         ),
         db=DB(
             host=db["host"],

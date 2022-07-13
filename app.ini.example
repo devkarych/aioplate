@@ -1,6 +1,7 @@
 [bot]
 token =
 parse_mode = HTML
+host_url = http://localhost:8081
 
 [db]
 host = localhost
